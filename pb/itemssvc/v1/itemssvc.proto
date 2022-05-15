@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package pb.itemsvc.v1;
+
+option go_package = "pb/itemssvc/v1";
+
+service ItemSvc {
+  rpc CreateItems(CreateItemsRequest) returns (CreateItemsResponse) {}
+}
+
+message CreateItemsResponse {
+  repeated ItemResponse items = 1;
+}
+
+message CreateItemsRequest {
+  repeated ItemRequest items = 1;
+}
+
+enum ItemType {
+  FRAGILE = 0;
+  ELECTRONICS = 1;
+  RADIO_ACTIVE = 2;
+  BIO_HAZARD = 3;
+}
+
+message ItemResponse {
+  string id = 1;
+  string returnID = 2;
+  string title = 3;
+  string description = 4;
+  int32 quantity = 5;
+  float weight = 6;
+  float height = 7;
+  float width = 8;
+  string type = 9;
+}
+
+message ItemRequest {
+  string returnID = 1;
+  string title = 2;
+  string description = 3;
+  int32 quantity = 4;
+  float weight = 5;
+  float height = 6;
+  float width = 7;
+  ItemType type = 8;
+}
