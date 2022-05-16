@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ItemSvcClient interface {
-	CreateItems(ctx context.Context, in *CreateItemsRequest, opts ...grpc.CallOption) (*CreateItemsResponse, error)
+	CreateItem(ctx context.Context, in *CreateItemRequest, opts ...grpc.CallOption) (*CreateItemResponse, error)
 }
 
 type itemSvcClient struct {
@@ -33,9 +33,9 @@ func NewItemSvcClient(cc grpc.ClientConnInterface) ItemSvcClient {
 	return &itemSvcClient{cc}
 }
 
-func (c *itemSvcClient) CreateItems(ctx context.Context, in *CreateItemsRequest, opts ...grpc.CallOption) (*CreateItemsResponse, error) {
-	out := new(CreateItemsResponse)
-	err := c.cc.Invoke(ctx, "/pb.itemsvc.v1.ItemSvc/CreateItems", in, out, opts...)
+func (c *itemSvcClient) CreateItem(ctx context.Context, in *CreateItemRequest, opts ...grpc.CallOption) (*CreateItemResponse, error) {
+	out := new(CreateItemResponse)
+	err := c.cc.Invoke(ctx, "/pb.itemsvc.v1.ItemSvc/CreateItem", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *itemSvcClient) CreateItems(ctx context.Context, in *CreateItemsRequest,
 // All implementations must embed UnimplementedItemSvcServer
 // for forward compatibility
 type ItemSvcServer interface {
-	CreateItems(context.Context, *CreateItemsRequest) (*CreateItemsResponse, error)
+	CreateItem(context.Context, *CreateItemRequest) (*CreateItemResponse, error)
 	mustEmbedUnimplementedItemSvcServer()
 }
 
@@ -54,8 +54,8 @@ type ItemSvcServer interface {
 type UnimplementedItemSvcServer struct {
 }
 
-func (UnimplementedItemSvcServer) CreateItems(context.Context, *CreateItemsRequest) (*CreateItemsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateItems not implemented")
+func (UnimplementedItemSvcServer) CreateItem(context.Context, *CreateItemRequest) (*CreateItemResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateItem not implemented")
 }
 func (UnimplementedItemSvcServer) mustEmbedUnimplementedItemSvcServer() {}
 
@@ -70,20 +70,20 @@ func RegisterItemSvcServer(s grpc.ServiceRegistrar, srv ItemSvcServer) {
 	s.RegisterService(&ItemSvc_ServiceDesc, srv)
 }
 
-func _ItemSvc_CreateItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateItemsRequest)
+func _ItemSvc_CreateItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateItemRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ItemSvcServer).CreateItems(ctx, in)
+		return srv.(ItemSvcServer).CreateItem(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.itemsvc.v1.ItemSvc/CreateItems",
+		FullMethod: "/pb.itemsvc.v1.ItemSvc/CreateItem",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ItemSvcServer).CreateItems(ctx, req.(*CreateItemsRequest))
+		return srv.(ItemSvcServer).CreateItem(ctx, req.(*CreateItemRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +96,8 @@ var ItemSvc_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ItemSvcServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateItems",
-			Handler:    _ItemSvc_CreateItems_Handler,
+			MethodName: "CreateItem",
+			Handler:    _ItemSvc_CreateItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

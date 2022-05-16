@@ -5,15 +5,7 @@ package pb.itemsvc.v1;
 option go_package = "pb/itemssvc/v1";
 
 service ItemSvc {
-  rpc CreateItems(CreateItemsRequest) returns (CreateItemsResponse) {}
-}
-
-message CreateItemsResponse {
-  repeated ItemResponse items = 1;
-}
-
-message CreateItemsRequest {
-  repeated ItemRequest items = 1;
+  rpc CreateItem(CreateItemRequest) returns (CreateItemResponse) {}
 }
 
 enum ItemType {
@@ -23,7 +15,7 @@ enum ItemType {
   BIO_HAZARD = 3;
 }
 
-message ItemResponse {
+message CreateItemResponse {
   string id = 1;
   string returnID = 2;
   string title = 3;
@@ -35,7 +27,7 @@ message ItemResponse {
   string type = 9;
 }
 
-message ItemRequest {
+message CreateItemRequest {
   string returnID = 1;
   string title = 2;
   string description = 3;
