@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ItemSvcClient interface {
 	CreateItem(ctx context.Context, in *CreateItemRequest, opts ...grpc.CallOption) (*CreateItemResponse, error)
+	DeleteItem(ctx context.Context, in *DeleteItemRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 }
 
 type itemSvcClient struct {
@@ -42,11 +43,21 @@ func (c *itemSvcClient) CreateItem(ctx context.Context, in *CreateItemRequest, o
 	return out, nil
 }
 
+func (c *itemSvcClient) DeleteItem(ctx context.Context, in *DeleteItemRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/pb.itemsvc.v1.ItemSvc/DeleteItem", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ItemSvcServer is the server API for ItemSvc service.
 // All implementations must embed UnimplementedItemSvcServer
 // for forward compatibility
 type ItemSvcServer interface {
 	CreateItem(context.Context, *CreateItemRequest) (*CreateItemResponse, error)
+	DeleteItem(context.Context, *DeleteItemRequest) (*EmptyResponse, error)
 	mustEmbedUnimplementedItemSvcServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedItemSvcServer struct {
 
 func (UnimplementedItemSvcServer) CreateItem(context.Context, *CreateItemRequest) (*CreateItemResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateItem not implemented")
+}
+func (UnimplementedItemSvcServer) DeleteItem(context.Context, *DeleteItemRequest) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteItem not implemented")
 }
 func (UnimplementedItemSvcServer) mustEmbedUnimplementedItemSvcServer() {}
 
@@ -88,6 +102,24 @@ func _ItemSvc_CreateItem_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ItemSvc_DeleteItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteItemRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemSvcServer).DeleteItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.itemsvc.v1.ItemSvc/DeleteItem",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemSvcServer).DeleteItem(ctx, req.(*DeleteItemRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ItemSvc_ServiceDesc is the grpc.ServiceDesc for ItemSvc service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var ItemSvc_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateItem",
 			Handler:    _ItemSvc_CreateItem_Handler,
+		},
+		{
+			MethodName: "DeleteItem",
+			Handler:    _ItemSvc_DeleteItem_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
