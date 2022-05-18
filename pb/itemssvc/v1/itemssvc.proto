@@ -6,16 +6,16 @@ option go_package = "pb/itemssvc/v1";
 
 service ItemSvc {
   rpc CreateItem(CreateItemRequest) returns (CreateItemResponse) {}
-//  rpc DeleteItem(DeleteItemRequest) returns (EmptyResponse) {}
+  rpc DeleteItem(DeleteItemRequest) returns (EmptyResponse) {}
 }
 
-//message EmptyResponse {
-//
-//}
-//
-//message DeleteItemRequest {
-//  string id = 1;
-//}
+message EmptyResponse {
+
+}
+
+message DeleteItemRequest {
+  string id = 1;
+}
 
 enum ItemType {
   FRAGILE = 0;
