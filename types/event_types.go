@@ -6,6 +6,7 @@ import (
 )
 
 type PickupAccepted struct {
+	PickupID uuid.UUID `json:"pickupID"`
 	ReturnID uuid.UUID `json:"returnID"`
 	DriverID uuid.UUID `json:"driverID"`
 }
